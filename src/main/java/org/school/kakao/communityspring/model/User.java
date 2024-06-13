@@ -1,9 +1,7 @@
 package org.school.kakao.communityspring.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -12,8 +10,6 @@ public class User {
     private Long id;
     private String profileImage;
     private String email;
-    @JsonIgnore
-    @Getter(AccessLevel.PROTECTED)
     private String password;
     private String nickname;
     private LocalDateTime createdAt;

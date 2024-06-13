@@ -2,6 +2,7 @@ package org.school.kakao.communityspring.dto;
 
 import lombok.Getter;
 import org.school.kakao.communityspring.model.User;
+import org.springframework.security.core.Authentication;
 
 @Getter
 public class UserResponse {

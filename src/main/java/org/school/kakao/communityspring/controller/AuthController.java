@@ -1,6 +1,7 @@
 package org.school.kakao.communityspring.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.school.kakao.communityspring.dto.UserLoginRequest;
@@ -29,9 +30,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public UserResponse login(@RequestBody UserLoginRequest loginRequest) {
+    public UserResponse login(@RequestBody UserLoginRequest loginRequest, HttpServletResponse response) {
+        System.out.println("AuthController.login");
         log.debug("Login request: {}", loginRequest);
-        Optional<User> optionalUser = authService.login(loginRequest.email(), loginRequest.password());
+        Optional<User> optionalUser = authService.login(loginRequest.email(), loginRequest.password(), response);
         User user = optionalUser.orElseThrow(() -> new EntityNotFoundException("User Not Found"));
         return new UserResponse(user);
     }
