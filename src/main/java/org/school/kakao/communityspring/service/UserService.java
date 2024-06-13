@@ -6,11 +6,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.school.kakao.communityspring.model.User;
 import org.school.kakao.communityspring.repository.UserJDBCRepository;
 import org.school.kakao.communityspring.repository.UserRepository;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -52,8 +58,12 @@ public class UserService {
     }
 
     private User meInternal() {
-        // TODO : 로그인 유저 찾기 (인증 구현 이후)
-        return userRepository.findById(1L);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("authentication.getPrincipal() = " + authentication.getPrincipal());
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        return optionalUser.orElseThrow(() -> new BadCredentialsException("Not found"));
     }
 
     public User updatePassword(String password) {

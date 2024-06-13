@@ -1,5 +1,7 @@
 package org.school.kakao.communityspring.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.school.kakao.communityspring.dto.UserModifyRequest;
 import org.school.kakao.communityspring.dto.UserResponse;
@@ -7,12 +9,15 @@ import org.school.kakao.communityspring.dto.UserUpdatePasswordRequest;
 import org.school.kakao.communityspring.model.User;
 import org.school.kakao.communityspring.service.UserService;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
 
 
+@SecurityRequirement(name = "bearer-key")
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @RestController
@@ -27,18 +32,24 @@ public class UserController {
                 .toList();
     }
 
+    @Operation(summary = "Test success")
     @GetMapping("/me")
-    public UserResponse me() {
+    public Map<String, String> me() {
         User me = userService.me();
-        return new UserResponse(me);
+        return Map.of("me", me.getEmail());
     }
 
+    @Operation(summary = "Test success")
     @PutMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public UserResponse update(@ModelAttribute UserModifyRequest modifyRequest) {
-        User user = userService.update(modifyRequest.image(), modifyRequest.nickname());
+    public UserResponse update(
+            @RequestPart(value = "nickname", required = false) String nickname,
+            @RequestPart(value = "image", required = false) MultipartFile image
+    ) {
+        User user = userService.update(image, nickname);
         return new UserResponse(user);
     }
 
+    @Operation(summary = "Test success")
     @PutMapping("/me/password")
     public UserResponse updatePassword(@RequestBody UserUpdatePasswordRequest request) {
         User user = userService.updatePassword(request.password());

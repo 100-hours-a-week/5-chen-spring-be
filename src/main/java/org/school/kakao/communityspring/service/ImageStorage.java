@@ -10,10 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ImageStorage {
     public String save(MultipartFile file) {
+        log.debug("Save(file = {})", file.getOriginalFilename());
         return "save_path";
     }
 
     public void delete(String path) {
-        log.debug("delete path: {}", path);
+        log.debug("Delete (file = {}", path);
     }
 }

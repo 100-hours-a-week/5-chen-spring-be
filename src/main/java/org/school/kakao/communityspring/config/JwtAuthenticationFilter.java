@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,7 +27,6 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
-    private final AuthenticationSuccessHandler successHandler;
     private final AuthenticationFailureHandler failureHandler = new AuthenticationEntryPointFailureHandler(
             new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 
@@ -48,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = convert(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            successHandler.onAuthenticationSuccess(request, response, filterChain, authentication);
+            filterChain.doFilter(request, response);
         } catch (AuthenticationException exception) {
             logger.debug("AUTHENTICATION FAILED", exception);
             failureHandler.onAuthenticationFailure(request, response, exception);

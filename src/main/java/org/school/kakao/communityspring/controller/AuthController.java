@@ -1,19 +1,22 @@
 package org.school.kakao.communityspring.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.school.kakao.communityspring.dto.UserLoginRequest;
+import org.school.kakao.communityspring.dto.UserLoginResponse;
 import org.school.kakao.communityspring.dto.UserRegisterRequest;
 import org.school.kakao.communityspring.dto.UserResponse;
 import org.school.kakao.communityspring.model.User;
 import org.school.kakao.communityspring.service.AuthService;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -23,18 +26,22 @@ import java.util.Optional;
 public class AuthController {
     private final AuthService authService;
 
+    @Operation(summary = "Test Success")
     @PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public UserResponse register(@ModelAttribute UserRegisterRequest registerRequest) {
-        User user = authService.signUp(registerRequest.file(), registerRequest.email(), registerRequest.password(), registerRequest.nickname());
+    public UserResponse register(
+            @RequestPart("image") MultipartFile image,
+            @RequestPart("email") String email,
+            @RequestPart("password") String password,
+            @RequestPart("nickname") String nickname
+    ) {
+        User user = authService.signUp(image, email, password, nickname);
         return new UserResponse(user);
     }
 
+    @Operation(summary = "Test Success")
     @PostMapping("/login")
-    public UserResponse login(@RequestBody UserLoginRequest loginRequest, HttpServletResponse response) {
-        System.out.println("AuthController.login");
+    public UserLoginResponse login(@RequestBody UserLoginRequest loginRequest, HttpServletResponse response) {
         log.debug("Login request: {}", loginRequest);
-        Optional<User> optionalUser = authService.login(loginRequest.email(), loginRequest.password(), response);
-        User user = optionalUser.orElseThrow(() -> new EntityNotFoundException("User Not Found"));
-        return new UserResponse(user);
+        return authService.login(loginRequest.email(), loginRequest.password(), response);
     }
 }
