@@ -1,16 +1,13 @@
 package org.school.kakao.communityspring.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.school.kakao.communityspring.config.JwtUtil;
 import org.school.kakao.communityspring.dto.UserLoginResponse;
-import org.school.kakao.communityspring.dto.UserRegisterRequest;
 import org.school.kakao.communityspring.dto.UserResponse;
 import org.school.kakao.communityspring.model.User;
 import org.school.kakao.communityspring.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

@@ -3,13 +3,11 @@ package org.school.kakao.communityspring.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.school.kakao.communityspring.dto.UserModifyRequest;
 import org.school.kakao.communityspring.dto.UserResponse;
 import org.school.kakao.communityspring.dto.UserUpdatePasswordRequest;
 import org.school.kakao.communityspring.model.User;
 import org.school.kakao.communityspring.service.UserService;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
