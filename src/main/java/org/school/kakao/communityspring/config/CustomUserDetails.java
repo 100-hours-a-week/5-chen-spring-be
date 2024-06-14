@@ -18,6 +18,11 @@ public class CustomUserDetails implements UserDetails {
         this.password = modelUser.getPassword();
     }
 
+    public CustomUserDetails(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(UserRole.USER.getRole()));
