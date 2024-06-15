@@ -1,19 +1,33 @@
 package org.school.kakao.communityspring.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@Table(name = "User")
+@Entity
 @Getter
 public class User {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
+    @Column(name = "profile_image")
     private String profileImage;
+    @Column
     private String email;
+    @Column
     private String password;
+    @Column
     private String nickname;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     private User(Long id, String profileImage, String email, String password, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
