@@ -1,6 +1,7 @@
 package org.school.kakao.communityspring.service.storage;
 
-import lombok.Getter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -10,23 +11,26 @@ import java.nio.file.Path;
 
 @EnableConfigurationProperties(CustomProperties.Storage.class)
 @Configuration
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CustomProperties {
-    private final Storage storage;
 
-    public Storage storage() {
-        return storage;
-    }
-
-    @Getter
     @RequiredArgsConstructor
     @ConfigurationProperties("storage")
     public static class Storage {
+        private final String directoryPath;
+        private final String imagePath;
+        private final String urlPrefix;
 
-        private final String location;
+        public Path storageWebPath() {
+            return Path.of(urlPrefix, "/**");
+        }
 
-        public Path getPath() {
-            return Path.of(location);
+        public Path imageDiscPath() {
+            return Path.of(directoryPath, imagePath);
+        }
+
+        public Path imageWebPath() {
+            return Path.of(urlPrefix, imagePath);
         }
     }
 }
