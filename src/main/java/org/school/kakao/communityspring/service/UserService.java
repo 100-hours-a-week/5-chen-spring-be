@@ -38,7 +38,7 @@ public class UserService {
     }
 
     private void updateImage(User user, MultipartFile image) {
-        String path = imageStorage.save(image);
+        String path = imageStorage.store(image);
         String prevPath = user.getProfileImage();
         imageStorage.delete(prevPath);
         user.updateProfimeImage(path);

@@ -40,7 +40,7 @@ public class AuthService {
     }
 
     public User signUp(MultipartFile profileImage, String email, String password, String nickname) {
-        String path = imageStorage.save(profileImage);
+        String path = imageStorage.store(profileImage);
         User user = User.create(path, email, password, nickname);
         return userRepository.save(user);
     }

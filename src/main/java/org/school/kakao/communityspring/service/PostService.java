@@ -30,7 +30,7 @@ public class PostService {
     }
 
     public PostWithUserResponse create(MultipartFile file, String title, String content) {
-        String image = imageStorage.save(file);
+        String image = imageStorage.store(file);
         User user = authContextUtil.loginUser();
         Post post = new Post(image, title, content, user);
         postRepository.save(post);

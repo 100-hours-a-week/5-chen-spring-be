@@ -26,3 +26,6 @@ logging:
         type:
           descriptor:
             sql: trace
+
+storage:
+  location: files
