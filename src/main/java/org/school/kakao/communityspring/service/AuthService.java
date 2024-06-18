@@ -20,6 +20,13 @@ import java.util.Optional;
 public class AuthService {
     private final UserRepository userRepository;
     private final ImageStorage imageStorage;
+    private final AuthContextUtil authContextUtil;
+
+    public UserLoginResponse renewAccess(HttpServletResponse response) {
+        User user = authContextUtil.loginUser();
+        String accessToken = JwtUtil.issueAccess(user);
+        return new UserLoginResponse(accessToken, new UserResponse(user));
+    }
 
     public UserLoginResponse login(String email, String password, HttpServletResponse response) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
@@ -33,10 +40,14 @@ public class AuthService {
             throw new UsernameNotFoundException("Incorrect Email or Password");
         }
 
-        String token = JwtUtil.issue(user);
-        JwtUtil.setHeader(response, token);
+        JwtUtil.issueRefresh(response, user);
 
+        String token = JwtUtil.issueAccess(user);
         return new UserLoginResponse(token, new UserResponse(user));
+    }
+
+    public void logout(HttpServletResponse response) {
+        JwtUtil.deleteRefresh(response);
     }
 
     public User signUp(MultipartFile profileImage, String email, String password, String nickname) {

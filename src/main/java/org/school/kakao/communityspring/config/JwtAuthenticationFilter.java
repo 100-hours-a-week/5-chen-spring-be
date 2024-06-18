@@ -36,37 +36,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String authorizationHeader = request.getHeader(JwtConstants.AUTHORIZATION_HEADER);
-        if (authorizationHeader == null) {
+        if (JwtUtil.hasAuthorizationHeader(request)) {
             log.debug("Authorization header is empty, from : {}", request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }
-        if (!authorizationHeader.startsWith(JwtConstants.BEARER_PREFIX)) {
+        if (!JwtUtil.startsWithBearerToken(request)) {
             throw new BadCredentialsException("Error authentication token");
         }
         try {
-            String token = authorizationHeader.substring(7);
-            Authentication authentication = convert(token);
+            String token = JwtUtil.getTokenFromRequest(request);
+
+            DecodedJWT decodedJWT = JwtUtil.verify(token);
+            String username = JwtUtil.getUsername(decodedJWT);
+
+            CustomUserDetails customUserDetails = new CustomUserDetails(username, null);
+            Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(customUserDetails, null, customUserDetails.getAuthorities());
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            JwtUtil.renewRefresh(response, username);
+
             filterChain.doFilter(request, response);
-        } catch (AuthenticationException exception) {
-            log.debug("AUTHENTICATION FAILED", exception);
-            failureHandler.onAuthenticationFailure(request, response, exception);
+        } catch (AuthenticationException e) {
+            log.debug("AUTHENTICATION FAILED", e);
+            failureHandler.onAuthenticationFailure(request, response, e);
+        } catch (JWTVerificationException e) {
+            log.debug("AUTHENTICATION FAILED", e);
+            failureHandler.onAuthenticationFailure(request, response, new BadCredentialsException(e.getMessage()));
         }
-    }
-
-    private Authentication convert(String token) {
-        DecodedJWT decodedJWT;
-        try {
-            decodedJWT = JwtUtil.verify(token);
-        } catch (JWTVerificationException exception) {
-            throw new BadCredentialsException(exception.getMessage());
-        }
-
-        String username = JwtUtil.getUsername(decodedJWT);
-        CustomUserDetails customUserDetails = new CustomUserDetails(username, null);
-        return UsernamePasswordAuthenticationToken.authenticated(customUserDetails, null, customUserDetails.getAuthorities());
     }
 }

@@ -33,7 +33,7 @@ public class PostController {
         return commentService.findByPostId(id);
     }
 
-    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public PostWithUserResponse create(
             @RequestPart("file") MultipartFile file,
             @RequestPart("content") String content,
