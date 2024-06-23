@@ -1,5 +1,7 @@
 package org.school.kakao.communityspring.service;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +24,16 @@ public class AuthService {
     private final ImageStorage imageStorage;
     private final AuthContextUtil authContextUtil;
 
-    public UserLoginResponse renewAccess(HttpServletResponse response) {
-        User user = authContextUtil.loginUser();
+    public UserLoginResponse loginByRefreshToken(HttpServletRequest request, HttpServletResponse response) {
+        String refreshTokenString = JwtUtil.getRefreshTokenFromRequest(request);
+        DecodedJWT decodedJWT = JwtUtil.verifyRefreshToken(refreshTokenString);
+        String email = JwtUtil.getUsername(decodedJWT);
+
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        User user = optionalUser.orElseThrow(() -> new UsernameNotFoundException(email));
+
         String accessToken = JwtUtil.issueAccess(user);
+        JwtUtil.issueRefresh(response, user);
         return new UserLoginResponse(accessToken, new UserResponse(user));
     }
 

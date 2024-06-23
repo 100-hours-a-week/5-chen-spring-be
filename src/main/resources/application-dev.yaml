@@ -1,0 +1,29 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  application:
+    name: community-spring
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+springdoc:
+  default-produces-media-type: application/json
+logging:
+  level:
+    org:
+      springframework:
+        jdbc: debug
+      school:
+        kakao:
+          communityspring: debug
+storage:
+  # 모든 파일이 저장될 위치 ex. ${directory-path}/${image-path}/img.png
+  directory-path: ${STORAGE_PATH}
+  # 실제 파일 위치나, 웹에서 접근할 때 접근 할 폴더 ex. ${directory-path}/${image-path}/img.png, localhost:8080/${url-prefix}/${image-path}/img.png
+  image-path: "/images"
+  # 웹에서 접근할 때 필요한 접두사 ex.localhost:8080/${url-prefix}/images/img.png
+  url-prefix: "/static"
+  server-name: "http://cdn.dev.community"

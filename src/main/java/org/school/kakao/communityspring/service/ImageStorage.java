@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -39,9 +41,9 @@ public class ImageStorage {
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            Path url = storageProperties.imageWebPath().resolve(filename);
-            return url.toString();
-        } catch (IOException e) {
+            URI uri = storageProperties.imageWebUrl().resolve(filename);
+            return uri.toString();
+        } catch (IOException | URISyntaxException e) {
             throw new StorageException("Failed to store file.", e);
         }
     }

@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String token = JwtUtil.getTokenFromRequest(request);
 
-            DecodedJWT decodedJWT = JwtUtil.verify(token);
+            DecodedJWT decodedJWT = JwtUtil.verifyAccessToken(token);
             String username = JwtUtil.getUsername(decodedJWT);
 
             CustomUserDetails customUserDetails = new CustomUserDetails(username, null);

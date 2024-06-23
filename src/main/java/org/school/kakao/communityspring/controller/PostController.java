@@ -1,5 +1,6 @@
 package org.school.kakao.communityspring.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.school.kakao.communityspring.dto.CommentWithUserResponse;
 import org.school.kakao.communityspring.dto.PostWithUserResponse;
@@ -35,10 +36,13 @@ public class PostController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public PostWithUserResponse create(
-            @RequestPart("file") MultipartFile file,
+            @RequestPart("image") MultipartFile image,
             @RequestPart("content") String content,
-            @RequestPart("title") String title
+            @RequestPart("title") String title,
+            HttpServletResponse response
     ) {
-        return postService.create(file, title, content);
+        PostWithUserResponse result = postService.create(image, title, content);
+        response.setStatus(HttpServletResponse.SC_CREATED);
+        return result;
     }
 }

@@ -29,8 +29,8 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("Post not found"));
     }
 
-    public PostWithUserResponse create(MultipartFile file, String title, String content) {
-        String image = imageStorage.store(file);
+    public PostWithUserResponse create(MultipartFile imageFile, String title, String content) {
+        String image = imageStorage.store(imageFile);
         User user = authContextUtil.loginUser();
         Post post = new Post(image, title, content, user);
         postRepository.save(post);

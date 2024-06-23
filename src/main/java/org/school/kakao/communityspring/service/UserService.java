@@ -3,6 +3,7 @@ package org.school.kakao.communityspring.service;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.school.kakao.communityspring.dto.UserResponse;
 import org.school.kakao.communityspring.model.User;
 import org.school.kakao.communityspring.repository.UserJDBCRepository;
 import org.school.kakao.communityspring.repository.UserRepository;
@@ -48,8 +49,9 @@ public class UserService {
         return userRepository.listAll();
     }
 
-    public User me() {
-        return authContextUtil.loginUser();
+    public UserResponse me() {
+        User user = authContextUtil.loginUser();
+        return new UserResponse(user);
     }
 
     public User updatePassword(String password) {

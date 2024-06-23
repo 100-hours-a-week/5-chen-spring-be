@@ -36,8 +36,8 @@ public class UserController {
 
     @Operation(summary = "Test success")
     @GetMapping("/me")
-    public UserLoginResponse me(HttpServletResponse response) {
-        return authService.renewAccess(response);
+    public UserResponse me(HttpServletResponse response) {
+        return userService.me();
     }
 
     @Operation(summary = "Test success")

@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.school.kakao.communityspring.model.User;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.web.util.WebUtils;
 
 import java.time.Instant;
 
@@ -36,7 +38,23 @@ public class JwtUtil {
         return authorizationHeader.replace(JwtConstants.BEARER_PREFIX, "");
     }
 
-    public static DecodedJWT verify(String token) throws JWTVerificationException {
+    public static String getRefreshTokenFromRequest(HttpServletRequest request) {
+        Cookie refreshCookie = WebUtils.getCookie(request, "refresh-token");
+        if (refreshCookie == null) {
+            throw new AuthenticationCredentialsNotFoundException("Refresh token not found");
+        }
+        return refreshCookie.getValue();
+    }
+
+    public static DecodedJWT verifyAccessToken(String token) throws JWTVerificationException {
+        return verifyToken(token);
+    }
+
+    public static DecodedJWT verifyRefreshToken(String token) throws JWTVerificationException {
+        return verifyToken(token);
+    }
+
+    private static DecodedJWT verifyToken(String token) throws JWTVerificationException {
         JWTVerifier verifier = JWT.require(JwtConstants.ALGORITHM)
                 .withIssuer(JwtConstants.ISSUER)
                 .build();

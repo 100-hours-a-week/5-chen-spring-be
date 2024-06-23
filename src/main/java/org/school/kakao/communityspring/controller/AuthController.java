@@ -1,6 +1,7 @@
 package org.school.kakao.communityspring.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,11 @@ public class AuthController {
     public UserLoginResponse login(@RequestBody UserLoginRequest loginRequest, HttpServletResponse response) {
         log.debug("Login request: {}", loginRequest);
         return authService.login(loginRequest.email(), loginRequest.password(), response);
+    }
+
+    @PostMapping("/refresh")
+    public UserLoginResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        return authService.loginByRefreshToken(request, response);
     }
 
     @PostMapping("/logout")
