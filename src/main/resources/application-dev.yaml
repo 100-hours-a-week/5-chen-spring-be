@@ -11,14 +11,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 springdoc:
   default-produces-media-type: application/json
-logging:
-  level:
-    org:
-      springframework:
-        jdbc: debug
-      school:
-        kakao:
-          communityspring: debug
 storage:
   # 모든 파일이 저장될 위치 ex. ${directory-path}/${image-path}/img.png
   directory-path: ${STORAGE_PATH}

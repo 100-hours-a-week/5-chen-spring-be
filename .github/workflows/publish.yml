@@ -1,0 +1,62 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
+
+name: Publish Project to develop
+
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    environment: dev
+    env:
+      BOOTJAR_NAME: 'app.jar'
+      UPLOAD_NAME: 'app.jar'
+      AWS_REGION: 'ap-northeast-2'
+      AWS_CODEDEPLOY_APPLICATION: 'week-11-application'
+      AWS_CODEDEPLOY_DEPLOY_GROUP: 'develop'
+      AWS_S3_BUCKET_NAME: 'chen-deployment-bucket'
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+
+    - name: Build with Gradle
+      run: ./gradlew build
+    
+    - name: Copy BootJar
+      run: cp ./build/libs/$BOOTJAR_NAME ./$UPLOAD_NAME
+
+    - name: Configuration for AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
+
+    - name: Upload to S3
+      run: aws deploy push --application-name ${{ env.AWS_CODEDEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET_NAME/deployments/$GITHUB_SHA.zip --source .
+      
+    - name: Deploy to EC2
+      run: aws deploy create-deployment --application-name ${{ env.AWS_CODEDEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODEDEPLOY_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET_NAME,key=deployments/$GITHUB_SHA.zip,bundleType=zip

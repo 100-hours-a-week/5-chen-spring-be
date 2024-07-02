@@ -69,3 +69,8 @@ tasks.withType(JavaCompile) {
 clean.doLast {
     file(querydslDir).deleteDir()
 }
+
+bootJar {
+    archiveBaseName = 'app'
+    archiveVersion = ''
+}
