@@ -17,8 +17,6 @@ jobs:
   build:
     environment: dev
     env:
-      BOOTJAR_NAME: 'app.jar'
-      UPLOAD_NAME: 'app.jar'
       AWS_REGION: 'ap-northeast-2'
       AWS_CODEDEPLOY_APPLICATION: 'week-11-application'
       AWS_CODEDEPLOY_DEPLOY_GROUP: 'develop'
@@ -44,9 +42,6 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew build
-    
-    - name: Copy BootJar
-      run: cp ./build/libs/$BOOTJAR_NAME ./$UPLOAD_NAME
 
     - name: Configuration for AWS
       uses: aws-actions/configure-aws-credentials@v4

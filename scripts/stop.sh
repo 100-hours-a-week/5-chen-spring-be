@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ROOT_PATH="/home/ec2-user/spring-app"
-JAR="$ROOT_PATH/app.jar"
+SERVER_JAR="$ROOT_PATH/executable.jar"
 
 STOP_LOG="$ROOT_PATH/stop.log"
 
-SERVICE_PID=$(pgrep -f $JAR) # 실행중인 Spring 서버의 PID
+SERVICE_PID=$(pgrep -f $SERVER_JAR) # 실행중인 Spring 서버의 PID
 
 if [ -z "$SERVICE_PID" ]; then
   echo "서비스 NotFound" >> $STOP_LOG
