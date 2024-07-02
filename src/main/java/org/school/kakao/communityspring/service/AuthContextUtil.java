@@ -21,7 +21,6 @@ public class AuthContextUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
-
         return optionalUser.orElseThrow(() -> new BadCredentialsException("Not found"));
     }
 }

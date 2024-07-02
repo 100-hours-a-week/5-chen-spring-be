@@ -22,7 +22,6 @@ import java.util.Optional;
 public class AuthService {
     private final UserRepository userRepository;
     private final ImageStorage imageStorage;
-    private final AuthContextUtil authContextUtil;
 
     public UserLoginResponse loginByRefreshToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshTokenString = JwtUtil.getRefreshTokenFromRequest(request);

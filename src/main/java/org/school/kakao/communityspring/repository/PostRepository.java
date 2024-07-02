@@ -5,12 +5,9 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
-    @EntityGraph(attributePaths = {"user"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<Post> findAllByOrderByCreatedAtDesc();
+public interface PostRepository extends JpaRepository<Post, Long>, CustomPostRepository {
 
     @EntityGraph(attributePaths = {"user"}, type = EntityGraph.EntityGraphType.FETCH)
     @NonNull

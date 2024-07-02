@@ -12,6 +12,7 @@ spring:
         show_sql: true
         format_sql: tr
         use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQLDialect
 springdoc:
   default-produces-media-type: application/json
 logging:
@@ -26,7 +27,6 @@ logging:
         type:
           descriptor:
             sql: trace
-
 
 storage:
   # 모든 파일이 저장될 위치 ex. ${directory-path}/${image-path}/img.png

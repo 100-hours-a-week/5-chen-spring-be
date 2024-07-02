@@ -4,11 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.school.kakao.communityspring.dto.UserLoginResponse;
 import org.school.kakao.communityspring.dto.UserResponse;
 import org.school.kakao.communityspring.dto.UserUpdatePasswordRequest;
 import org.school.kakao.communityspring.model.User;
-import org.school.kakao.communityspring.service.AuthService;
 import org.school.kakao.communityspring.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +22,6 @@ import java.util.Map;
 @RestController
 public class UserController {
     private final UserService userService;
-    private final AuthService authService;
 
     @GetMapping("/")
     public List<UserResponse> list() {

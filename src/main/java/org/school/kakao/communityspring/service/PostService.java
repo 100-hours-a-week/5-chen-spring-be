@@ -19,9 +19,8 @@ public class PostService {
     private final ImageStorage imageStorage;
     private final AuthContextUtil authContextUtil;
 
-    public Stream<PostWithUserResponse> listAll() {
-        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
-        return posts.stream().map(post -> new PostWithUserResponse(post, post.getUser()));
+    public List<PostWithUserResponse> listAll() {
+        return postRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public PostWithUserResponse findById(Long id) throws EntityNotFoundException {

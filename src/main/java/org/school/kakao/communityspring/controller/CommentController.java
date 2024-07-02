@@ -1,5 +1,6 @@
 package org.school.kakao.communityspring.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.school.kakao.communityspring.dto.CommentResponse;
 import org.school.kakao.communityspring.dto.CommentUpdateRequest;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@SecurityRequirement(name = "bearer-key")
 @RequestMapping("/comments")
 @RequiredArgsConstructor
 @RestController
