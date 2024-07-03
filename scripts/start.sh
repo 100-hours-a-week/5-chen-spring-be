@@ -10,6 +10,10 @@ START_LOG="$ROOT_PATH/start.log"
 
 NOW=$(date +%c)
 
+DB_URL=$(aws ssm get-parameter --name /week-eleven/DB_URL --query "Parameter.Value")
+DB_USER=$(aws ssm get-parameter --name /week-eleven/DB_USER --query "Parameter.Value")
+DB_PASSWORD=$(aws ssm get-parameter --name /week-eleven/DB_PASSWORD --query "Parameter.Value")
+
 echo "[$NOW] $SERVER_JAR 복사" >> $START_LOG
 cp $UPLOADED_JAR $SERVER_JAR
 
