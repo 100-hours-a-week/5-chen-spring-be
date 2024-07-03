@@ -10,9 +10,9 @@ START_LOG="$ROOT_PATH/start.log"
 
 NOW=$(date +%c)
 
-DB_URL=$(aws ssm get-parameter --name /week-eleven/DB_URL --query "Parameter.Value")
-DB_USER=$(aws ssm get-parameter --name /week-eleven/DB_USER --query "Parameter.Value")
-DB_PASSWORD=$(aws ssm get-parameter --name /week-eleven/DB_PASSWORD --query "Parameter.Value")
+DB_URL=$(aws ssm get-parameter --name /week-eleven/DB_URL --query "Parameter.Value" --output text)
+DB_USER=$(aws ssm get-parameter --name /week-eleven/DB_USER --query "Parameter.Value" --output text)
+DB_PASSWORD=$(aws ssm get-parameter --name /week-eleven/DB_PASSWORD --query "Parameter.Value" --output text)
 
 echo "[$NOW] DB 정보 : $DB_URL $DB_PASSWORD $DB_USER" >> $START_LOG
 
