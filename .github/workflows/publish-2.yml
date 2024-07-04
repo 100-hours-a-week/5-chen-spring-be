@@ -17,8 +17,9 @@ jobs:
       contents: read
       packages: write
 
-
     steps:
+    - uses: actions/checkout@v4
+
     - name: Configuration for AWS
       id: configure-aws
       uses: aws-actions/configure-aws-credentials@v4
