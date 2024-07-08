@@ -20,7 +20,7 @@ public class JwtUtil {
 
     public static boolean hasAuthorizationHeader(HttpServletRequest request) {
         String authorizationHeader = retrieveAuthorizationHeaderValue(request);
-        return authorizationHeader == null;
+        return authorizationHeader != null;
     }
 
     public static boolean startsWithBearerToken(HttpServletRequest request) {

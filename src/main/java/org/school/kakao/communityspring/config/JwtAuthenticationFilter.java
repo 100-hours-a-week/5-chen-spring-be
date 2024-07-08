@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        if (JwtUtil.hasAuthorizationHeader(request)) {
+        if (!JwtUtil.hasAuthorizationHeader(request)) {
             log.debug("Authorization header is empty, from : {}", request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
